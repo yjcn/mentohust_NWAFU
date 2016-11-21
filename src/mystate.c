@@ -25,6 +25,7 @@
 #include <unistd.h>
 #include <sys/wait.h>
 #include <netinet/in.h>
+#include <stdio.h>
 
 #define MAX_SEND_COUNT		3	/* 最大超时次数 */
 
@@ -49,6 +50,7 @@ extern unsigned fillSize;
 extern u_int32_t pingHost;
 #ifndef NO_ARP
 extern u_int32_t rip, gateway;
+extern u_int32_t ip,mask;
 extern u_char gateMAC[];
 static void sendArpPacket();	/* ARP监视 */
 #endif
@@ -387,6 +389,19 @@ static int sendEchoPacket();	/* 发送心跳包 */
 static int sendLogoffPacket();  /* 发送退出包 */
 static int waitEchoPacket();	/* 等候响应包 */
 
+static u_char writeip(u_char base)	/* 算法，将一个字节的8位颠倒并取反 */
+{
+	u_char result = 0;
+	int i;
+	for (i=0; i<8; i++)
+	{
+		result <<= 1;
+		result |= base&0x01;
+		base >>= 1;
+	}
+	return ~result;
+}
+
 static void setTimer(unsigned interval) /* 设置定时器 */
 {
 	struct itimerval timer;
@@ -622,6 +637,30 @@ static int sendChallengePacket()
 		memcpy(sendPacket + 0x90 + nameLen, computePwd(capBuf+0x18), 0x10);
 		//memcpy(sendPacket + 0xa0 +nameLen, fillBuf + 0x68, fillSize-0x68);
 		memcpy(sendPacket + 0x118 + nameLen, computeV4(capBuf+0x18, capBuf[0x17]), 0x80);
+		if(0!=ip)
+		{
+			u_char *p = (u_char *)(&ip);
+			u_char temp[12]={};
+			int i=0;
+			for(i=0;i<4;i++)
+			{	
+				temp[i]=writeip(p[i]);
+			}
+			p= (u_char *)(&mask);
+			for(i=4;i<8;i++)
+			{	
+				temp[i]=writeip(p[i-4]);
+			}
+			p=(u_char*)(&gateway);
+			for(i=8;i<12;i++)
+			{	
+				temp[i]=writeip(p[i-8]);
+			}
+			memcpy(sendPacket+0x37,temp,12);
+			sendPacket[0x47]=0xf1;
+			sendPacket[0x48]=0x10;
+			printf("Have IP!!!!!!!!!!!!!!!!!!\n");
+		}
 		//sendPacket[0x77] = 0xc7;
 		setTimer(timeout);
 	}
