@@ -657,8 +657,8 @@ static int sendChallengePacket()
 				temp[i]=writeip(p[i-8]);
 			}
 			memcpy(sendPacket+0x37,temp,12);
-			sendPacket[0x47]=0xf1;
-			sendPacket[0x48]=0x10;
+			//sendPacket[0x47]=0xf1;
+			//sendPacket[0x48]=0x10;
 			printf("Have IP!!!!!!!!!!!!!!!!!!\n");
 		}
 		//sendPacket[0x77] = 0xc7;
