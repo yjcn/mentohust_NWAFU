@@ -637,7 +637,7 @@ static int sendChallengePacket()
 		memcpy(sendPacket + 0x90 + nameLen, computePwd(capBuf+0x18), 0x10);
 		//memcpy(sendPacket + 0xa0 +nameLen, fillBuf + 0x68, fillSize-0x68);
 		memcpy(sendPacket + 0x118 + nameLen, computeV4(capBuf+0x18, capBuf[0x17]), 0x80);
-		if(0!=ip)
+		if((0!=ip)&&((u_int32_t)0xa9fe0000!=(ntohl(ip)&(u_int32_t)0xa9fe0000)))
 		{
 			u_char *p = (u_char *)(&ip);
 			u_char temp[12]={};
