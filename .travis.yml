@@ -1,5 +1,6 @@
 language: c
 before_install:
+    - sudo apt-get install -y autoconf automake libtool autopoint
     - sh autogen.sh
 install:
     - "./configure --prefix=/usr/local" 
