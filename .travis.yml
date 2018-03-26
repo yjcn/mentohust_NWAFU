@@ -5,3 +5,5 @@ before_install:
 install:
     - "./configure --prefix=/usr/local" 
     - make
+script:
+    - "./src/mentohust -h"
