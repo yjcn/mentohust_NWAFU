@@ -1,4 +1,5 @@
 #根据西农锐捷Linux客户端抓的包进行了相应修改，现在可以成功认证
+[![Build Status](https://travis-ci.org/yjcn/mentohust_NWAFU.svg?branch=master)](https://travis-ci.org/yjcn/mentohust_NWAFU)
 主要修改了mystate.c 与checkV4.c两个文件内的相关内容
 #目前存在问题
 1、心跳存在问题，每隔7分钟左右会掉线，多次掉线会被服务器拉黑
