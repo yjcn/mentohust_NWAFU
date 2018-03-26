@@ -1,6 +1,6 @@
 language: c
 before_install:
-    -sh autogen.sh
+    - sh autogen.sh
 install:
-    -./configure --prefix=/usr/local 
-    -make
+    - "./configure --prefix=/usr/local" 
+    - make
